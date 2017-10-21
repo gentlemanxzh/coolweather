@@ -35,7 +35,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- *
  * Created by gentleman on 2017/10/20.
  */
 
@@ -109,12 +108,21 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
-                }else if (currentLevel ==LEVEL_COUNTY){
+                } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = countyList.get(position).getWeatherId();
-                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if (getActivity()instanceof WeatherActivity){
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.mWeatherId = weatherId;
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+
+                    }
                 }
             }
         });
@@ -154,7 +162,7 @@ public class ChooseAreaFragment extends Fragment {
 
         } else {
             String address = "http://guolin.tech/api/china";
-             queryFromServer(address,"province");
+            queryFromServer(address, "province");
         }
     }
 
@@ -165,7 +173,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
         cityList = DataSupport
-                .where("provinceId = ?",String.valueOf(selectedProvince.getProvinceCode()))
+                .where("provinceId = ?", String.valueOf(selectedProvince.getProvinceCode()))
                 .find(City.class);
 //        List<City> list = DataSupport.where("provinceId = ?",String.valueOf(1)).find(City.class);
 //        for (int i = 0;i<list.size();i++){
@@ -181,8 +189,8 @@ public class ChooseAreaFragment extends Fragment {
             currentLevel = LEVEL_CITY;
         } else {
             int provinceCode = selectedProvince.getProvinceCode();
-            String address = "http://guolin.tech/api/china" +"/"+ provinceCode;
-             queryFromServer(address,"city");
+            String address = "http://guolin.tech/api/china" + "/" + provinceCode;
+            queryFromServer(address, "city");
         }
     }
 
@@ -208,7 +216,7 @@ public class ChooseAreaFragment extends Fragment {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
             String address = "http://guolin.tech/api/china/" + provinceCode + "/" + cityCode;
-             queryFromServer(address,"county");
+            queryFromServer(address, "county");
         }
     }
 
@@ -226,7 +234,7 @@ public class ChooseAreaFragment extends Fragment {
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        Toast.makeText(getContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "加载失败", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -266,7 +274,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void showProgressDialog() {
-        if (progressDialog==null){
+        if (progressDialog == null) {
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("正在加载中");
             progressDialog.setCanceledOnTouchOutside(false);
@@ -274,8 +282,8 @@ public class ChooseAreaFragment extends Fragment {
         progressDialog.show();
     }
 
-    private void closeProgressDialog(){
-        if (progressDialog!=null){
+    private void closeProgressDialog() {
+        if (progressDialog != null) {
             progressDialog.dismiss();
         }
     }
