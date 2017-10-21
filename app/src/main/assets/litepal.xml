@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value = "cool_weather"/>
+    <dbname value="white" ></dbname>
 
-    <version value = "1"/>
+    <version value="3" ></version>
 
     <list>
-        <maping class = "com.example.gentleman.coolweather.db.Province"/>
-        <maping class = "com.example.gentleman.coolweather.db.City"/>
-        <maping class = "com.example.gentleman.coolweather.db.County"/>
+        <mapping class="com.example.gentleman.coolweather.db.Province"></mapping>
+        <mapping class="com.example.gentleman.coolweather.db.City"></mapping>
+        <mapping class="com.example.gentleman.coolweather.db.County"></mapping>
     </list>
-
 </litepal>
+

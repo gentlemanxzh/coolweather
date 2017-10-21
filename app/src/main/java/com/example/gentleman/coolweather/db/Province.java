@@ -7,7 +7,7 @@ import org.litepal.crud.DataSupport;
  * Created by gentleman on 2017/10/19.
  */
 
-public class Province  extends DataSupport{
+public class Province extends DataSupport{
     //id字段
     private int id;
     //省的名字
